@@ -8,35 +8,47 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Space Theme Colors */
+    --background: 220 27% 8%;
+    --foreground: 213 27% 84%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 224 27% 12%;
+    --card-foreground: 213 27% 84%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 224 27% 12%;
+    --popover-foreground: 213 27% 84%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 258 89% 66%;
+    --primary-foreground: 220 27% 8%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 215 27% 16%;
+    --secondary-foreground: 213 27% 84%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 215 27% 16%;
+    --muted-foreground: 217 10% 64%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 142 76% 36%;
+    --accent-foreground: 213 27% 84%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 93% 73%;
+    --destructive-foreground: 220 27% 8%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 215 27% 16%;
+    --input: 215 27% 16%;
+    --ring: 258 89% 66%;
 
-    --radius: 0.5rem;
+    /* Space Gradients */
+    --gradient-cosmic: linear-gradient(135deg, hsl(258 89% 66% / 0.2), hsl(142 76% 36% / 0.2));
+    --gradient-space: linear-gradient(180deg, hsl(220 27% 8%), hsl(224 27% 12%));
+    --gradient-glow: radial-gradient(circle, hsl(258 89% 66% / 0.3), transparent);
+    --gradient-crash: linear-gradient(45deg, hsl(0 93% 73%), hsl(15 93% 73%));
+
+    /* Shadows */
+    --shadow-cosmic: 0 0 50px hsl(258 89% 66% / 0.3);
+    --shadow-glow: 0 0 30px hsl(142 76% 36% / 0.5);
+    --shadow-crash: 0 0 40px hsl(0 93% 73% / 0.6);
+
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +112,109 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground overflow-hidden;
+  }
+}
+
+@layer components {
+  .cosmic-bg {
+    background: var(--gradient-space);
+    position: relative;
+  }
+  
+  .cosmic-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 20%, hsl(258 89% 66% / 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, hsl(142 76% 36% / 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 60%, hsl(258 89% 66% / 0.05) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .star-field {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      radial-gradient(2px 2px at 20px 30px, white, transparent),
+      radial-gradient(2px 2px at 40px 70px, white, transparent),
+      radial-gradient(1px 1px at 90px 40px, white, transparent),
+      radial-gradient(1px 1px at 130px 80px, white, transparent),
+      radial-gradient(2px 2px at 160px 30px, white, transparent);
+    background-repeat: repeat;
+    background-size: 200px 100px;
+    animation: twinkle 4s ease-in-out infinite alternate;
+    opacity: 0.8;
+  }
+
+  .astronaut {
+    animation: float 6s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px hsl(258 89% 66% / 0.5));
+  }
+
+  .multiplier-text {
+    text-shadow: 0 0 20px currentColor;
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  .crash-flash {
+    animation: crash-flash 0.5s ease-in-out;
+  }
+}
+
+@layer utilities {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-crash-flash {
+    animation: crash-flash 0.5s ease-in-out;
+  }
+  
+  .animate-rise {
+    animation: rise 0.3s ease-out;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(-5deg); }
+  50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.8; }
+  100% { opacity: 1; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { 
+    transform: scale(1);
+    text-shadow: 0 0 20px currentColor;
+  }
+  50% { 
+    transform: scale(1.05);
+    text-shadow: 0 0 30px currentColor, 0 0 40px currentColor;
+  }
+}
+
+@keyframes crash-flash {
+  0% { background-color: transparent; }
+  50% { background-color: hsl(0 93% 73% / 0.3); }
+  100% { background-color: transparent; }
+}
+
+@keyframes rise {
+  0% { 
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+  }
+  100% { 
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
